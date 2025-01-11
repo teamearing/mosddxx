@@ -1,179 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PRIVATE SERVER</title>
-  <style>
-    /* Full-screen setup */
-    body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: black;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Background with Button</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
 
-    canvas {
-      display: block;
-    }
+        .box {
+            width: 300px;
+            height: 300px;
+            border: 5px solid red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+        }
 
-    /* Button container */
-    .button-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
+        .button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+        }
 
-    .telegram-container {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+        .button:hover {
+            background-color: darkred;
+        }
 
-    /* Button styles */
-    button {
-      display: block;
-      margin: 10px auto;
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        .result-text {
+            font-size: 24px;
+            color: white;
+            text-align: center;
+            display: none;
+        }
 
-    button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-    }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: gold;
+            pointer-events: none;
+            animation: move 1s infinite;
+        }
 
-    /* Individual button colors */
-    .zanti {
-      background-color: red;
-    }
-
-    .blade {
-      background: linear-gradient(45deg, green, red);
-    }
-
-    .tanjiro {
-      background-color: darkblue;
-    }
-
-    .god {
-      background-color: darkgreen;
-    }
-
-    .telegram {
-      background-color: red;
-    }
-  </style>
+        @keyframes move {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            100% {
+                transform: translate3d(100px, 100px, 0);
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Canvas for particles -->
-  <canvas id="particles"></canvas>
 
-  <!-- Button Container -->
-  <div class="button-container">
-    <button class="zanti" onclick="openLink('https://teammodx.github.io/Sexzanti/')">ZANTI MOD</button>
-    <button class="blade" onclick="openLink('https://teammodx.github.io/Bladeserver/')">BLADE MOD</button>
-    <button class="tanjiro" onclick="openLink('https://teammodx.github.io/Tanjito/')">TANJIRO MOD</button>
-    <button class="god" onclick="openLink('https://teamearing.github.io/godmod/')">GOD MOD</button>
-  </div>
+    <div class="box">
+        <div class="result-text" id="resultText">Big/Small</div>
+    </div>
+    <button class="button" onclick="showResult()">Result [Tap to Button]</button>
 
-  <!-- Telegram Button -->
-  <div class="telegram-container">
-    <button class="telegram" onclick="openLink('https://t.me/+WpmHoGixzvkyOTc1')">JOIN TELEGRAM FREE HACKS</button>
-  </div>
+    <script>
+        // Create particles
+        for (let i = 0; i < 200; i++) {
+            let particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.width = `${Math.random() * 5 + 5}px`;
+            particle.style.height = particle.style.width;
+            particle.style.left = `${Math.random() * window.innerWidth}px`;
+            particle.style.top = `${Math.random() * window.innerHeight}px`;
 
-  <script>
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let particlesArray = [];
-    const maxParticles = 150;
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = Math.random() * 2 - 1;
-        this.speedY = Math.random() * 2 - 1;
-        this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-      }
-
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        // Bounce off edges
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-
-    function initParticles() {
-      particlesArray = [];
-      for (let i = 0; i < maxParticles; i++) {
-        particlesArray.push(new Particle());
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-
-        // Draw connecting lines
-        for (let j = i; j < particlesArray.length; j++) {
-          const dx = particlesArray[i].x - particlesArray[j].x;
-          const dy = particlesArray[i].y - particlesArray[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
-            ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
-            ctx.stroke();
-            ctx.closePath();
-          }
+            // Set random colors for particles
+            particle.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(particle);
         }
-      }
-      requestAnimationFrame(animateParticles);
-    }
 
-    function openLink(url) {
-      window.open(url, '_blank');
-    }
+        // Handle the button click
+        function showResult() {
+            const resultText = document.getElementById('resultText');
+            const sizes = ['Big', 'Small'];
+            const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
+            resultText.textContent = randomSize;
+            resultText.style.display = 'block';
+        }
+    </script>
 
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initParticles();
-    });
-
-    initParticles();
-    animateParticles();
-  </script>
 </body>
 </html>
