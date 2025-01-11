@@ -30,7 +30,8 @@
         }
 
         .button {
-            margin-top: 20px;
+            position: absolute;
+            top: 20px;
             padding: 15px 30px;
             background-color: red;
             color: white;
@@ -74,7 +75,7 @@
     <div class="box">
         <div class="result-text" id="resultText">Big/Small</div>
     </div>
-    <button class="button" onclick="showResult()">Result [Tap to Button]</button>
+    <button class="button" id="actionButton" onclick="showResult()">Result [Tap to Button]</button>
 
     <script>
         // Create particles
@@ -99,6 +100,14 @@
             resultText.textContent = randomSize;
             resultText.style.display = 'block';
         }
+
+        // Hide the button after one minute
+        setTimeout(() => {
+            const button = document.getElementById('actionButton');
+            if (button) {
+                button.style.display = 'none';
+            }
+        }, 60000); // 60000 milliseconds = 1 minute
     </script>
 
 </body>
